@@ -25,6 +25,28 @@ def hello(request):
         width=500,
         height=500
     )
+
+    fig1 = go.Figure()
+    months = ["0"+str(i) for i in range(1, 10)]
+    months += ["10", "11", "12"]
+    sales_by_month = []
+    for i in months:
+        sales_by_month.append(df.loc[df['Order Date'].astype(str).str.contains("-"+i+"-"), 'Sales'].sum())
+    fig1.add_trace(
+        go.Scatter(
+            x = months,
+            y = sales_by_month,
+            fill = 'tozeroy'
+        )
+    )
+    fig1.update_layout(
+        paper_bgcolor="LightSteelBlue",
+        #paper_bgcolor="#0e0f2e",
+        plot_bgcolor="#0e0f2e",
+        margin=dict(l=20, r=20, t=20, b=20),
+        width=500,
+        height=500
+    )
     '''
     fig.add_trace(
         go.Pie(df['Region'], values=sales_by_region, names=regions,
@@ -37,6 +59,7 @@ def hello(request):
                 template="plotly_dark")
     fig2 = 
     '''
-    div = fig.to_html(full_html=False)
-    context = {'pie': div}
+    div1 = fig.to_html(full_html=False)
+    div2 = fig1.to_html(full_html=False)
+    context = {'pie': div1, 'trend': div2}
     return render(request, 'home.html', context)
