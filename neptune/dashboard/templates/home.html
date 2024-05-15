@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+	<header>
+		Dashboard
+	</header>
+	<body>
+		<h1>Hello!</h1>
+		{% if pie %}
+		{{ pie|safe }}
+		{% else %}
+		<p>No graph was provided.</p>
+		{% endif %}
+	</body>
+</html>
