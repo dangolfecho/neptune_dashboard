@@ -19,6 +19,11 @@
 		{% else %}
 			<p>No graph was provided.</p>
 		{% endif %}
+		{% if bar %}
+			{{ bar|safe }}
+		{% else %}
+			<p>No graph was provided.</p>
+		{% endif %}
 	</body>
 	</body>
 </html>

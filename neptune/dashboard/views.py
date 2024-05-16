@@ -53,7 +53,7 @@ def hello(request):
         )
     )
 
-    buttons = [
+    buttons1 = [
         dict(
             label='View by Quarter',
             method='update',
@@ -77,7 +77,7 @@ def hello(request):
             dict(
                 type='buttons',
                 direction='right',
-                buttons=buttons,
+                buttons=buttons1,
                 showactive=True,
                 x=0.15,
                 xanchor='left',
@@ -86,19 +86,64 @@ def hello(request):
             )
         ]
     )
-    '''
-    fig.add_trace(
-        go.Pie(df['Region'], values=sales_by_region, names=regions,
-            color_discrete_sequence=px.colors.sequential.ice,
-            template="plotly_dark"
+
+
+    sales_by_region_qty = []
+    for i in regions:
+        sales_by_region_qty.append(df.loc[df['Region'] == i, 'Quantity ordered new'].sum())
+    fig2 = go.Figure()
+    fig2.add_trace(
+        go.Bar(
+            x=sales_by_region,
+            y=regions,
+            orientation='h'
         )
     )
-    fig = px.pie(df['Region'], values=sales_by_region, names=regions,
-                color_discrete_sequence=px.colors.sequential.ice,
-                template="plotly_dark")
-    fig2 = 
-    '''
-    div1 = fig.to_html(full_html=False)
-    div2 = fig1.to_html(full_html=False)
-    context = {'pie': div1, 'trend': div2}
+    fig2.add_trace(
+        go.Bar(
+            x=sales_by_region_qty,
+            y=regions,
+            orientation='h'
+        )
+    )
+
+    buttons2 = [
+        dict(
+            label='View by Revenue',
+            method='update',
+            args=[{'visible': [False, True]}, {'title': 'Revenue'}]
+        ),
+        dict(
+            label='View by Quantity',
+            method='update',
+            args=[{'visible': [True, False]}, {'title': 'Quantity'}]
+        )
+    ]
+
+    fig2.update_layout(
+        paper_bgcolor="LightSteelBlue",
+        #paper_bgcolor="#0e0f2e",
+        plot_bgcolor="#0e0f2e",
+        margin=dict(l=20, r=20, t=20, b=20),
+        width=500,
+        height=500,
+        updatemenus=[
+            dict(
+                type='buttons',
+                direction='right',
+                buttons=buttons2,
+                showactive=True,
+                x=0.15,
+                xanchor='left',
+                y=1.15,
+                yanchor='top'
+            )
+        ],
+        xaxis={'categoryorder': 'total descending'}
+    )
+
+    div = fig.to_html(full_html=False)
+    div1 = fig1.to_html(full_html=False)
+    div2 = fig2.to_html(full_html=False)
+    context = {'pie': div, 'trend': div1, 'bar': div2}
     return render(request, 'home.html', context)
