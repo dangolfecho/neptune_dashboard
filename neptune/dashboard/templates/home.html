@@ -50,6 +50,14 @@
 			<p>No graph was provided.</p>
 		{% endif %}
 			</div>
+			<div class="item">
+		{% if map %}
+				<h2>Sales by State</h2>
+			{{ map|safe }}
+		{% else %}
+			<p>No graph was provided.</p>
+		{% endif %}
+			</div>
 		</div>
 	</body>
 	</body>

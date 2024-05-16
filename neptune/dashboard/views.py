@@ -1,3 +1,4 @@
+from re import S
 from django.shortcuts import render, redirect
 import plotly.graph_objects as go
 import plotly.express as px
@@ -398,12 +399,35 @@ def hello(request):
             )
         ]
     )
+    df3 = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/2011_us_ag_exports.csv')
+
+    us_states = df3['state'].to_list()
+    sales_rev_by_state = []
+    for i in us_states:
+        value = df.loc[df['State or Province'] == i, 'Sales'].sum()
+        sales_rev_by_state.append(value)
+    fig3 = px.choropleth(df3,
+        locations=df3['code'],
+        color=sales_rev_by_state,
+        color_continuous_scale='ice_r',
+        locationmode='USA-states',
+        scope='usa'
+    )
+    fig3.update_layout(
+        paper_bgcolor="LightSteelBlue",
+        #paper_bgcolor="#0e0f2e",
+        plot_bgcolor="#0e0f2e",
+        margin=dict(l=20, r=20, t=20, b=20),
+        width=1000,
+        height=master_height,
+    )
 
     div = fig.to_html(full_html=False)
     div1 = fig1.to_html(full_html=False)
     div2 = sale_monthly.to_html(full_html=False)
     div3 = sale_qtr.to_html(full_html=False)
     div4 = fig2.to_html(full_html=False)
+    div5 = fig3.to_html(full_html=False)
 
-    context = {'pie': div, 'bar': div1, 'sale_monthly': div2, 'sale_qtr': div3, 'funnel': div4}
+    context = {'pie': div, 'bar': div1, 'sale_monthly': div2, 'sale_qtr': div3, 'funnel': div4, 'map': div5}
     return render(request, 'home.html', context)
