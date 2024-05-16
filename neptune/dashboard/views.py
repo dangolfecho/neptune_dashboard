@@ -323,52 +323,58 @@ def hello(request):
     # Funnel
     fig2 = go.Figure()
     df1 = pd.read_excel("D:\\Neptune\\Sales- Dashboard.xlsx", sheet_name="Returns")
-    total_sales_count = df.shape[0]
-    total_return_count = df1.shape[0]
     stages = ["Sale Initiated", "Sale Completed without a return"]
-    funnel_data = [[total_sales_count, (total_sales_count-total_return_count)]]
-    fig2.add_trace(
-        go.Funnel(
-        x = funnel_data[0],
-        y = stages
-        )
-    )
+    funnel_data = []
+    total_sold = 0
+    total_returned = 0
     for i in range(len(regions)):
-        total_sales_count = len(df[(df['Region'] == regions[i])])
-        total_return_count = len(df[(df['Region'] == regions[i]) & (df['Order ID'].to_string() in df1['Order ID'].tolist())])
-        funnel_data.append([total_sales_count, (total_sales_count-total_return_count)])
+        sales_count = len(df[(df['Region'] == regions[i])])
+        return_count = len(df[(df['Region'] == regions[i]) & (df['Order ID'].isin(df1['Order ID'].tolist()))])
+
+        total_sold += sales_count
+        total_returned += return_count
+
+        funnel_data.append([sales_count, (sales_count-return_count)])
         fig2.add_trace(
            go.Funnel(
-           x = funnel_data[i+1],
-           y = stages
+           x = funnel_data[i],
+           y = stages,
+           visible = False
            )
         )
-
+    funnel_data.append([total_sold, (total_sold-total_returned)])
+    fig2.add_trace(
+        go.Funnel(
+        x = funnel_data[4],
+        y = stages,
+        visible = True
+        )
+    )
     buttons3 = [
         dict(
             label='All',
             method='update',
-            args=[{'visible': vis_matrix[0]}, {'title': 'All'}]
+            args=[{'visible': vis_matrix[4]}, {'title': 'All'}]
         ),
         dict(
             label='Central',
             method='update',
-            args=[{'visible': vis_matrix[1]}, {'title': 'Central'}]
+            args=[{'visible': vis_matrix[0]}, {'title': 'Central'}]
         ),
         dict(
             label='East',
             method='update',
-            args=[{'visible': vis_matrix[2]}, {'title': 'East'}]
+            args=[{'visible': vis_matrix[1]}, {'title': 'East'}]
         ),
         dict(
             label='South',
             method='update',
-            args=[{'visible': vis_matrix[3]}, {'title': 'South'}]
+            args=[{'visible': vis_matrix[2]}, {'title': 'South'}]
         ),
         dict(
             label='West',
             method='update',
-            args=[{'visible': vis_matrix[4]}, {'title': 'West'}]
+            args=[{'visible': vis_matrix[3]}, {'title': 'West'}]
         )
     ]
 
@@ -377,7 +383,7 @@ def hello(request):
         #paper_bgcolor="#0e0f2e",
         plot_bgcolor="#0e0f2e",
         margin=dict(l=20, r=20, t=20, b=20),
-        width=master_width,
+        width=1000,
         height=master_height,
         updatemenus=[
             dict(
