@@ -27,13 +27,29 @@
 		{% endif %}
 			</div>
 			<div class="item">
-		{% if master_plot %}
-				<h2>Trend and Funnel charts</h2>
-			{{ master_plot|safe }}
+		{% if sale_monthly %}
+				<h2>Monthly Sales</h2>
+			{{ sale_monthly|safe }}
 		{% else %}
 			<p>No graph was provided.</p>
 		{% endif %}
-		</div>
+			</div>
+			<div class="item">
+		{% if sale_qtr %}
+				<h2>Quarterly Sales</h2>
+			{{ sale_qtr|safe }}
+		{% else %}
+			<p>No graph was provided.</p>
+		{% endif %}
+			</div>
+			<div class="item">
+		{% if funnel %}
+				<h2>Funnel</h2>
+			{{ funnel|safe }}
+		{% else %}
+			<p>No graph was provided.</p>
+		{% endif %}
+			</div>
 		</div>
 	</body>
 	</body>

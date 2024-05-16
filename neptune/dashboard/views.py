@@ -96,10 +96,11 @@ def hello(request):
         ]
     )
 
-
-    master_figure = make_subplots(rows=2, cols=1)
-
     #Line chart
+
+    sale_monthly = go.Figure()
+    sale_qtr = go.Figure()
+
     months = ["0"+str(i) for i in range(1, 10)]
     months += ["10", "11", "12"]
     sales_by_month = []
@@ -124,122 +125,159 @@ def hello(request):
             if(month_int % 3 == 0):
                 sales_categorized_qtr[i].append(quarterly_count)
                 quarterly_count = 0
-    master_figure.add_trace(
+    sale_monthly.add_trace(
         go.Scatter(
             x = months,
             y = sales_by_month,
             fill = 'tozeroy',
             visible = True
-        ),
-        row = 1,
-        col = 1
+        )
     )
-    master_figure.add_trace(
+    sale_monthly.add_trace(
         go.Scatter(
             x = months,
             y = sales_categorized[0],
             fill = 'tozeroy',
             visible = False
-        ),
-        row = 1,
-        col = 1
+        )
     )
-    master_figure.add_trace(
+    sale_monthly.add_trace(
         go.Scatter(
             x = months,
             y = sales_categorized[1],
             fill = 'tozeroy',
             visible = False
-        ),
-        row = 1,
-        col = 1
+        )
     )
-    master_figure.add_trace(
+    sale_monthly.add_trace(
         go.Scatter(
             x = months,
             y = sales_categorized[2],
             fill = 'tozeroy',
             visible = False
-        ),
-        row = 1,
-        col = 1
+        )
     )
-    master_figure.add_trace(
+    sale_monthly.add_trace(
         go.Scatter(
             x = months,
             y = sales_categorized[3],
             fill = 'tozeroy',
             visible = False
-        ),
-        row = 1,
-        col = 1
+        )
     )
-    master_figure.add_trace(
+    sale_qtr.add_trace(
         go.Scatter(
             x = quarters,
             y = sales_by_quarter,
             fill = 'tozeroy',
-            visible=False
-        ),
-        row = 1,
-        col = 1
+            visible=True
+        )
     )
-    master_figure.add_trace(
+    sale_qtr.add_trace(
         go.Scatter(
             x = quarters,
             y = sales_categorized_qtr[0],
             fill = 'tozeroy',
             visible = False
-        ),
-        row = 1,
-        col = 1
+        )
     )
-    master_figure.add_trace(
+    sale_qtr.add_trace(
         go.Scatter(
             x = quarters,
             y = sales_categorized_qtr[1],
             fill = 'tozeroy',
             visible = False
-        ),
-        row = 1,
-        col = 1
+        )
     )
-    master_figure.add_trace(
+    sale_qtr.add_trace(
         go.Scatter(
             x = quarters,
             y = sales_categorized_qtr[2],
             fill = 'tozeroy',
             visible = False
-        ),
-        row = 1,
-        col = 1
+        )
     )
-    master_figure.add_trace(
+    sale_qtr.add_trace(
         go.Scatter(
             x = quarters,
             y = sales_categorized_qtr[3],
             fill = 'tozeroy',
             visible = False
-        ),
-        row = 1,
-        col = 1
+        )
     )
+
+    vis_matrix = [
+        [],
+        [],
+        [],
+        [],
+        []
+    ]
+
+    for i in range(len(vis_matrix)):
+        for x in range(5):
+            if(x == i) :
+                vis_matrix[i].append(True)
+            else:
+                vis_matrix[i].append(False)
+    buttons1 = [
+        dict(
+            label='All',
+            method='update',
+            args=[{'visible': vis_matrix[0]}, {'title': 'All'}]
+        ),
+        dict(
+            label='Central',
+            method='update',
+            args=[{'visible': vis_matrix[1]}, {'title': 'Central'}]
+        ),
+        dict(
+            label='East',
+            method='update',
+            args=[{'visible': vis_matrix[2]}, {'title': 'East'}]
+        ),
+        dict(
+            label='South',
+            method='update',
+            args=[{'visible': vis_matrix[3]}, {'title': 'South'}]
+        ),
+        dict(
+            label='West',
+            method='update',
+            args=[{'visible': vis_matrix[4]}, {'title': 'West'}]
+        )
+    ]
 
 
     buttons2 = [
         dict(
-            label='View by Month',
+            label='All',
             method='update',
-            args=[{'visible': [True, False]}, {'title': 'Monthly Sales'}]
+            args=[{'visible': vis_matrix[0]}, {'title': 'All'}]
         ),
         dict(
-            label='View by Quarter',
+            label='Central',
             method='update',
-            args=[{'visible': [False, True]}, {'title': 'Quarterly Sales'}]
+            args=[{'visible': vis_matrix[1]}, {'title': 'Central'}]
+        ),
+        dict(
+            label='East',
+            method='update',
+            args=[{'visible': vis_matrix[2]}, {'title': 'East'}]
+        ),
+        dict(
+            label='South',
+            method='update',
+            args=[{'visible': vis_matrix[3]}, {'title': 'South'}]
+        ),
+        dict(
+            label='West',
+            method='update',
+            args=[{'visible': vis_matrix[4]}, {'title': 'West'}]
         )
     ]
 
-    master_figure.update_layout(
+    sale_monthly.update_layout(
         paper_bgcolor="LightSteelBlue",
         #paper_bgcolor="#0e0f2e",
         plot_bgcolor="#0e0f2e",
@@ -260,25 +298,106 @@ def hello(request):
         ]
     )
 
+    sale_qtr.update_layout(
+        paper_bgcolor="LightSteelBlue",
+        #paper_bgcolor="#0e0f2e",
+        plot_bgcolor="#0e0f2e",
+        margin=dict(l=20, r=20, t=20, b=20),
+        width=master_width,
+        height=master_height,
+        updatemenus=[
+            dict(
+                type='buttons',
+                direction='right',
+                buttons=buttons2,
+                showactive=True,
+                x=0.15,
+                xanchor='left',
+                y=1.15,
+                yanchor='top'
+            )
+        ]
+    )
+
     
     # Funnel
-    
+    fig2 = go.Figure()
     df1 = pd.read_excel("D:\\Neptune\\Sales- Dashboard.xlsx", sheet_name="Returns")
     total_sales_count = df.shape[0]
     total_return_count = df1.shape[0]
     stages = ["Sale Initiated", "Sale Completed without a return"]
-    master_figure.add_trace(go.Funnel(
-        x = [total_sales_count, (total_sales_count-total_return_count)],
+    funnel_data = [[total_sales_count, (total_sales_count-total_return_count)]]
+    fig2.add_trace(
+        go.Funnel(
+        x = funnel_data[0],
         y = stages
-        ),
-        row = 2,
-        col = 1
+        )
     )
+    for i in range(len(regions)):
+        total_sales_count = len(df[(df['Region'] == regions[i])])
+        total_return_count = len(df[(df['Region'] == regions[i]) & (df['Order ID'].to_string() in df1['Order ID'].tolist())])
+        funnel_data.append([total_sales_count, (total_sales_count-total_return_count)])
+        fig2.add_trace(
+           go.Funnel(
+           x = funnel_data[i+1],
+           y = stages
+           )
+        )
 
+    buttons3 = [
+        dict(
+            label='All',
+            method='update',
+            args=[{'visible': vis_matrix[0]}, {'title': 'All'}]
+        ),
+        dict(
+            label='Central',
+            method='update',
+            args=[{'visible': vis_matrix[1]}, {'title': 'Central'}]
+        ),
+        dict(
+            label='East',
+            method='update',
+            args=[{'visible': vis_matrix[2]}, {'title': 'East'}]
+        ),
+        dict(
+            label='South',
+            method='update',
+            args=[{'visible': vis_matrix[3]}, {'title': 'South'}]
+        ),
+        dict(
+            label='West',
+            method='update',
+            args=[{'visible': vis_matrix[4]}, {'title': 'West'}]
+        )
+    ]
+
+    fig2.update_layout(
+        paper_bgcolor="LightSteelBlue",
+        #paper_bgcolor="#0e0f2e",
+        plot_bgcolor="#0e0f2e",
+        margin=dict(l=20, r=20, t=20, b=20),
+        width=master_width,
+        height=master_height,
+        updatemenus=[
+            dict(
+                type='buttons',
+                direction='right',
+                buttons=buttons3,
+                showactive=True,
+                x=0.15,
+                xanchor='left',
+                y=1.15,
+                yanchor='top'
+            )
+        ]
+    )
 
     div = fig.to_html(full_html=False)
     div1 = fig1.to_html(full_html=False)
-    div2 = master_figure.to_html(full_html=False)
+    div2 = sale_monthly.to_html(full_html=False)
+    div3 = sale_qtr.to_html(full_html=False)
+    div4 = fig2.to_html(full_html=False)
 
-    context = {'pie': div, 'bar': div1, 'master_plot': div2}
+    context = {'pie': div, 'bar': div1, 'sale_monthly': div2, 'sale_qtr': div3, 'funnel': div4}
     return render(request, 'home.html', context)
