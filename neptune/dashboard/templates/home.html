@@ -9,21 +9,36 @@
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'style.css' %}">
 		<h1>Hello!</h1>
+		<div class="container">
+			<div class="item">
 		{% if pie %}
 			{{ pie|safe }}
 		{% else %}
 			<p>No graph was provided.</p>
 		{% endif %}
+			</div>
+			<div class="item">
 		{% if trend %}
 			{{ trend|safe }}
 		{% else %}
 			<p>No graph was provided.</p>
 		{% endif %}
+			</div>
+			<div class="item">
 		{% if bar %}
 			{{ bar|safe }}
 		{% else %}
 			<p>No graph was provided.</p>
 		{% endif %}
+			</div>
+			<div class="item">
+		{% if funnel %}
+			{{ funnel|safe }}
+		{% else %}
+			<p>No graph was provided.</p>
+		{% endif %}
+		</div>
+		</div>
 	</body>
 	</body>
 </html>

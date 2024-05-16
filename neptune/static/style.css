@@ -13,3 +13,18 @@ body {
 h1 {
     font: roboto-regular;
 }
+
+.container {
+    /*display: grid;
+    grid-template-columns: 500px 500px 500px;
+    */
+    gap: 10px;
+    grid-auto-rows: auto;
+    width:100%;
+    margin: 10px;
+}
+
+.item {
+    width: 100%;
+    margin-right: 1rem;
+}
