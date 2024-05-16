@@ -8,10 +8,11 @@
 	<body>
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'style.css' %}">
-		<h1>Hello!</h1>
+		<h1><center>Sales Dashboard</center></h1>
 		<div class="container">
 			<div class="item">
 		{% if pie %}
+				<h2>Sales by Region</h2>
 			{{ pie|safe }}
 		{% else %}
 			<p>No graph was provided.</p>
@@ -19,6 +20,7 @@
 			</div>
 			<div class="item">
 		{% if trend %}
+				<h2>Sales Trend chart</h2>
 			{{ trend|safe }}
 		{% else %}
 			<p>No graph was provided.</p>
@@ -26,6 +28,7 @@
 			</div>
 			<div class="item">
 		{% if bar %}
+				<h2>Regional performance chart</h2>
 			{{ bar|safe }}
 		{% else %}
 			<p>No graph was provided.</p>
@@ -33,6 +36,7 @@
 			</div>
 			<div class="item">
 		{% if funnel %}
+			<h2>Sales Funnel</h2>
 			{{ funnel|safe }}
 		{% else %}
 			<p>No graph was provided.</p>

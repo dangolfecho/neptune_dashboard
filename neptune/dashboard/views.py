@@ -14,6 +14,7 @@ master_height = 500
 
 def hello(request):
     df = pd.read_excel("D:\\Neptune\\Sales- Dashboard.xlsx")
+    #Pie chart
     regions = ['Central', 'East', 'South', 'West']
     sales_by_region = []
     for i in regions:
@@ -29,6 +30,7 @@ def hello(request):
         height=master_height
     )
 
+    #Line chart
     fig1 = go.Figure()
     months = ["0"+str(i) for i in range(1, 10)]
     months += ["10", "11", "12"]
@@ -92,6 +94,7 @@ def hello(request):
         ]
     )
 
+    #Bar chart
     sales_by_region_qty = []
     for i in regions:
         sales_by_region_qty.append(df.loc[df['Region'] == i, 'Quantity ordered new'].sum())
