@@ -1,9 +1,6 @@
-from re import S
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 import plotly.graph_objects as go
 import plotly.express as px
-from plotly.subplots import make_subplots
-import numpy as np
 import pandas as pd
 
 # Create your views here.
