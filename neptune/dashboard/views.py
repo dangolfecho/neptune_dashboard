@@ -32,6 +32,12 @@ def hello(request):
     sales_by_month = []
     for i in months:
         sales_by_month.append(df.loc[df['Order Date'].astype(str).str.contains("-"+i+"-"), 'Sales'].sum())
+    sales_by_quarter = []
+    sales_by_quarter.append(sales_by_month[0] + sales_by_month[1] + sales_by_month[2])
+    sales_by_quarter.append(sales_by_month[3] + sales_by_month[4] + sales_by_month[5])
+    sales_by_quarter.append(sales_by_month[6] + sales_by_month[7] + sales_by_month[8])
+    sales_by_quarter.append(sales_by_month[9] + sales_by_month[10] + sales_by_month[11])
+    quarters = ['I', 'II', 'III', 'IV']
     fig1.add_trace(
         go.Scatter(
             x = months,
@@ -39,13 +45,46 @@ def hello(request):
             fill = 'tozeroy'
         )
     )
+    fig1.add_trace(
+        go.Scatter(
+            x = quarters,
+            y = sales_by_quarter,
+            fill = 'tozeroy'
+        )
+    )
+
+    buttons = [
+        dict(
+            label='View by Quarter',
+            method='update',
+            args=[{'visible': [False, True]}, {'title': 'Quarterly Sales'}]
+        ),
+        dict(
+            label='View by Month',
+            method='update',
+            args=[{'visible': [True, False]}, {'title': 'Monthly Sales'}]
+        )
+    ]
+
     fig1.update_layout(
         paper_bgcolor="LightSteelBlue",
         #paper_bgcolor="#0e0f2e",
         plot_bgcolor="#0e0f2e",
         margin=dict(l=20, r=20, t=20, b=20),
         width=500,
-        height=500
+        height=500,
+        updatemenus=[
+            dict(
+                type='buttons',
+                direction='right',
+                buttons=buttons,
+                showactive=True,
+                x=0.15,
+                xanchor='left',
+                y=1.15,
+                yanchor='top'
+            )
+        ]
     )
     '''
     fig.add_trace(
